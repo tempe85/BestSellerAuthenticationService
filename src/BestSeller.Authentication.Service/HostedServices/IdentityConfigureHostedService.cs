@@ -23,9 +23,9 @@ namespace BestSeller.Authentication.Service.HostedServices
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<FactorySchedulerRole>>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<UserRole>>();
             //Use this logic to create endpoints for directly creating a user
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<FactorySchedulerUser>>();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<BestSellerUser>>();
 
             await CreateRoleIfDoesNotExistAsync(Roles.Admin, roleManager);
             await CreateRoleIfDoesNotExistAsync(Roles.FactorySchedulerUser, roleManager);
@@ -34,13 +34,12 @@ namespace BestSeller.Authentication.Service.HostedServices
             var adminUser = await userManager.FindByEmailAsync(_identitySettings.AdminEmail);
             if (adminUser == null)
             {
-                adminUser = new FactorySchedulerUser
+                adminUser = new BestSellerUser
                 {
                     UserName = _identitySettings.AdminEmail,
                     Email = _identitySettings.AdminEmail,
                     FirstName = "Admin",
                     LastName = "Admin",
-                    AssignedWorkStationId = null
                 };
                 await userManager.CreateAsync(adminUser, _identitySettings.AdminPassword);
                 await userManager.AddToRoleAsync(adminUser, Roles.Admin);
@@ -50,13 +49,13 @@ namespace BestSeller.Authentication.Service.HostedServices
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-        private static async Task CreateRoleIfDoesNotExistAsync(string role, RoleManager<FactorySchedulerRole> roleManager)
+        private static async Task CreateRoleIfDoesNotExistAsync(string role, RoleManager<UserRole> roleManager)
         {
             var exists = await roleManager.RoleExistsAsync(role);
 
             if (!exists)
             {
-                await roleManager.CreateAsync(new FactorySchedulerRole { Name = role });
+                await roleManager.CreateAsync(new UserRole { Name = role });
             }
         }
     }

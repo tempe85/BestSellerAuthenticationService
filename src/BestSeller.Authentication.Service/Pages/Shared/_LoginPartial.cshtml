@@ -1,8 +1,8 @@
 @using Microsoft.AspNetCore.Identity
 @using BestSeller.Authentication.Service.Entities
 
-@inject SignInManager<FactorySchedulerUser> SignInManager
-@inject UserManager<FactorySchedulerUser> UserManager
+@inject SignInManager<BestSellerUser> SignInManager
+@inject UserManager<BestSellerUser> UserManager
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))

@@ -7,10 +7,10 @@ using MongoDB.Driver;
 
 namespace BestSeller.Authentication.Service.Repositories
 {
-    public class WorkAreaRepository : MongoBaseRepository<WorkArea>
+    public class BestSellerFavoritesRepository : MongoBaseRepository<UserBestSellerFavorites>
     {
-        public WorkAreaRepository(
-            IMongoCollection<WorkArea> collection) : base(collection)
+        public BestSellerFavoritesRepository(
+            IMongoCollection<UserBestSellerFavorites> collection) : base(collection)
         {
 
         }

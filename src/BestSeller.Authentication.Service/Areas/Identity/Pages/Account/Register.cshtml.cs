@@ -22,15 +22,15 @@ namespace BestSeller.Authentication.Service.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<FactorySchedulerUser> _signInManager;
-        private readonly UserManager<FactorySchedulerUser> _userManager;
+        private readonly SignInManager<BestSellerUser> _signInManager;
+        private readonly UserManager<BestSellerUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IdentitySettings _identitySettings;
 
         public RegisterModel(
-            UserManager<FactorySchedulerUser> userManager,
-            SignInManager<FactorySchedulerUser> signInManager,
+            UserManager<BestSellerUser> userManager,
+            SignInManager<BestSellerUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             IOptions<IdentitySettings> identityOptions)
@@ -88,7 +88,8 @@ namespace BestSeller.Authentication.Service.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new FactorySchedulerUser { UserName = Input.Email, Email = Input.Email, LastName = Input.LastName, FirstName = Input.FirstName, AssignedWorkStationId = null };
+                var user = new BestSellerUser { UserName = Input.Email, Email = Input.Email, LastName = Input.LastName, FirstName = Input.FirstName };
+                //TODO: Create best seller object here!
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

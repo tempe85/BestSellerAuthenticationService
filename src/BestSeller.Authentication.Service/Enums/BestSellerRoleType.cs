@@ -1,10 +1,9 @@
 namespace BestSeller.Authentication.Service.Enums
 {
-    public enum FactorySchedulerRoleType
+    public enum BestSellerRoleType
     {
         Admin = 0,
-        Planner = 1,
-        User = 2,
+        User = 1,
         None = 99
     }
 }

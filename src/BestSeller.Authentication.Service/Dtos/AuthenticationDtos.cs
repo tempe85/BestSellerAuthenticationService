@@ -3,15 +3,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BestSeller.Authentication.Service.Dtos
 {
-    public record FactorySchedulerUserDto(
+    public record BestSellerUserDto(
         Guid Id,
         string Username,
         string Email,
-        Guid? AssignedWorkStationId,
         string FirstName,
         string LastName,
+        string[] FavoritesBookList,
         DateTimeOffset CreatedDate);
-    public record AddFactorySchedulerUserDto([Required][EmailAddress] string Email, [Required] string Password);
-    public record UpdateFactorySchedulerUserDto([Required][EmailAddress] string Email);
+    public record AddUserDto([Required][EmailAddress] string Email, [Required] string Password, string FirstName, string LastName);
+    public record UpdateUserDto([Required][EmailAddress] string Email, string FirstName, string LastName);
 
 }

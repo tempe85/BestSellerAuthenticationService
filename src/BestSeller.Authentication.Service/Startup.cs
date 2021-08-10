@@ -6,7 +6,6 @@ using BestSeller.Authentication.Service.Entities;
 using BestSeller.Authentication.Service.HostedServices;
 using BestSeller.Authentication.Service.Models;
 using BestSeller.Authentication.Service.MongoDB;
-using BestSeller.Authentication.Service.Processors;
 using BestSeller.Authentication.Service.Repositories;
 using BestSeller.Authentication.Service.Settings;
 using Microsoft.AspNetCore.Builder;
@@ -50,7 +49,6 @@ namespace BestSeller.Authentication.Service
                 config.AddConsole();
             });
             ConfigureMongoDb(services);
-            services.AddSingleton<IWorkStationProcessor, WorkStationProcessor>();
 
             var identityServerSettings = Configuration.GetSection(nameof(IdentityServerSettings)).Get<IdentityServerSettings>();
             services.AddIdentityServer(options =>
@@ -61,7 +59,7 @@ namespace BestSeller.Authentication.Service
                 options.Events.RaiseErrorEvents = true;
                 options.Events.RaiseInformationEvents = true;
             })
-                    .AddAspNetIdentity<FactorySchedulerUser>()
+                    .AddAspNetIdentity<BestSellerUser>()
                     .AddInMemoryClients(identityServerSettings.Clients)
                     .AddInMemoryApiScopes(identityServerSettings.ApiScopes)
                     .AddInMemoryApiResources(identityServerSettings.ApiResources)
@@ -120,22 +118,20 @@ namespace BestSeller.Authentication.Service
         {
             var serviceSettings = GetMongoDbSettings();
             services.AddMongoDB(serviceSettings);
-            services.AddMongoDbRepository<WorkBuildingRepository, WorkBuilding>(serviceSettings.WorkBuildingCollectionName);
-            services.AddMongoDbRepository<WorkAreaRepository, WorkArea>(serviceSettings.WorkAreaCollectionName);
-            services.AddMongoDbRepository<WorkStationRepository, WorkStation>(serviceSettings.WorkStationCollectionName);
+            services.AddMongoDbRepository<BestSellerFavoritesRepository, UserBestSellerFavorites>(serviceSettings.UserBestSellerFavoritesCollectionName);
             services
                 .Configure<IdentitySettings>(Configuration.GetSection(nameof(IdentitySettings)))
-                .AddDefaultIdentity<FactorySchedulerUser>()
-                .AddRoles<FactorySchedulerRole>()
-                .AddMongoDbStores<FactorySchedulerUser, FactorySchedulerRole, Guid>
+                .AddDefaultIdentity<BestSellerUser>()
+                .AddRoles<UserRole>()
+                .AddMongoDbStores<BestSellerUser, UserRole, Guid>
                 (
                     serviceSettings.ConnectionString,
                     serviceSettings.DatabaseName //Update this later to auth specific database
                 );
 
         }
-        private FactorySchedulerSettings GetMongoDbSettings() =>
-            Configuration.GetSection(nameof(FactorySchedulerSettings)).Get<FactorySchedulerSettings>();
+        private BestSellerSettings GetMongoDbSettings() =>
+            Configuration.GetSection(nameof(BestSellerSettings)).Get<BestSellerSettings>();
 
     }
 }

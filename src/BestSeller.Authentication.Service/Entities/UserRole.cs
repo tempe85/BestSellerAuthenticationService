@@ -6,8 +6,8 @@ using MongoDbGenericRepository.Attributes;
 namespace BestSeller.Authentication.Service.Entities
 {
 
-    [CollectionName("FactorySchedulerRoles")]
-    public class FactorySchedulerRole : MongoIdentityRole<Guid>
+    [CollectionName("UserRoles")]
+    public class UserRole : MongoIdentityRole<Guid>
     {
 
     }

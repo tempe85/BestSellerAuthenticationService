@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BestSeller.Authentication.Service.Dtos;
 using BestSeller.Authentication.Service.Entities;
 using BestSeller.Authentication.Service.Enums;
+using BestSeller.Authentication.Service.Helpers;
 using BestSeller.Authentication.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -15,44 +16,52 @@ namespace BestSeller.Authentication.Service.Controllers
 {
     [ApiController]
     [Route("Users")]
-    [Authorize(Roles = Roles.Admin, Policy = LocalApi.PolicyName)]
     public class FactorySchedulerUsersController : ControllerBase
     {
-        private readonly UserManager<FactorySchedulerUser> _userManager;
-        private readonly IMongoBaseRepository<WorkStation> _workStationRepository;
+        private readonly UserManager<BestSellerUser> _userManager;
+        private readonly IMongoBaseRepository<UserBestSellerFavorites> _userBestSellerFavoritesRepository;
 
-        public FactorySchedulerUsersController(UserManager<FactorySchedulerUser> userManager, IMongoBaseRepository<WorkStation> workStationRepository)
+        public FactorySchedulerUsersController(UserManager<BestSellerUser> userManager, IMongoBaseRepository<UserBestSellerFavorites> userBestSellerFavoritesRepository)
         {
             _userManager = userManager;
-            _workStationRepository = workStationRepository;
+            _userBestSellerFavoritesRepository = userBestSellerFavoritesRepository;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<FactorySchedulerUserDto>> GetUsers()
+        public async Task<ActionResult<IEnumerable<BestSellerUserDto>>> GetUsersAsync()
         {
-            var users = _userManager.Users
-                        .ToList()
-                        .Select(p => p.AsDto());
+            var usersFavoritesBookLists = await _userBestSellerFavoritesRepository.GetAllAsync();
+            var users = _userManager.Users.ToList().Select(user =>
+            {
+                var userBookList = usersFavoritesBookLists.FirstOrDefault(p => p.UserId == user.Id)?.BestSellerFavorites;
+                if (userBookList == null)
+                {
+                    return user.AsDto(Array.Empty<string>());
+                }
+                return user.AsDto(userBookList);
+            });
             return Ok(users);
         }
 
         //Adding this type of user requires no auth
         [HttpPost]
-        public async Task<ActionResult<FactorySchedulerUserDto>> AddFactorySchedulerUser([FromBody] AddFactorySchedulerUserDto addFactorySchedulerUserDto)
+        public async Task<ActionResult<BestSellerUserDto>> AddUser([FromBody] AddUserDto addUserDto)
         {
-            var existingUser = await _userManager.FindByEmailAsync(addFactorySchedulerUserDto.Email);
+            var existingUser = await _userManager.FindByEmailAsync(addUserDto.Email);
             if (existingUser != null)
             {
                 //Need a better return error message (to explain that user with that email already exists)
                 return Forbid();
             }
-            var createdUser = new FactorySchedulerUser
+            var createdUser = new BestSellerUser
             {
-                Email = addFactorySchedulerUserDto.Email,
-                UserName = addFactorySchedulerUserDto.Email
+                Email = addUserDto.Email,
+                UserName = addUserDto.Email
             };
-            await _userManager.CreateAsync(createdUser, addFactorySchedulerUserDto.Password);
+            await _userManager.CreateAsync(createdUser, addUserDto.Password);
             await _userManager.AddToRoleAsync(createdUser, Roles.FactorySchedulerUser);
+
+            await UserFavoritesHelpers.GetOrCreateUserBestSellerFavoritesFromUserIfOneDoesNotExistAsync(createdUser, _userBestSellerFavoritesRepository);
 
             return CreatedAtAction(nameof(GetUserByIdAsync), new { id = createdUser.Id }, createdUser);
         }
@@ -60,25 +69,34 @@ namespace BestSeller.Authentication.Service.Controllers
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<FactorySchedulerUserDto>> GetUserByIdAsync([FromRoute] Guid id)
+        public async Task<ActionResult<BestSellerUserDto>> GetUserByIdAsync([FromRoute] Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
                 return NotFound();
             }
-            return user.AsDto();
+            var userBestSellerFavoritesObject = await UserFavoritesHelpers.GetOrCreateUserBestSellerFavoritesFromUserIfOneDoesNotExistAsync(user, _userBestSellerFavoritesRepository);
+            return user.AsDto(userBestSellerFavoritesObject.BestSellerFavorites);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUserAsync([FromRoute] Guid id, UpdateFactorySchedulerUserDto updateFactorySchedulerUserDto)
+        public async Task<IActionResult> UpdateUserAsync([FromRoute] Guid id, UpdateUserDto updateUserDto)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
                 return NotFound();
             }
-            user.Email = updateFactorySchedulerUserDto.Email;
+            user.Email = updateUserDto.Email;
+            if (!string.IsNullOrWhiteSpace(updateUserDto.FirstName))
+            {
+                user.FirstName = updateUserDto.FirstName;
+            }
+            if (!string.IsNullOrWhiteSpace(updateUserDto.LastName))
+            {
+                user.LastName = updateUserDto.LastName;
+            }
 
             await _userManager.UpdateAsync(user);
 
@@ -86,7 +104,7 @@ namespace BestSeller.Authentication.Service.Controllers
         }
 
         [HttpPut("roles/{id}")]
-        public async Task<ActionResult<FactorySchedulerUserDto>> UpdateUserRoleAsync([FromRoute] Guid id, [FromBody] FactorySchedulerRoleType[] roles)
+        public async Task<ActionResult> UpdateUserRoleAsync([FromRoute] Guid id, [FromBody] BestSellerRoleType[] roles)
         {
 
             var existingUser = await _userManager.FindByIdAsync(id.ToString());
@@ -97,13 +115,9 @@ namespace BestSeller.Authentication.Service.Controllers
             var currentRoles = existingUser.Roles;
 
 
-            if (roles.Any(p => p == FactorySchedulerRoleType.Admin))
+            if (roles.Any(p => p == BestSellerRoleType.Admin))
             {
                 await _userManager.AddToRoleAsync(existingUser, Roles.Admin);
-            }
-            if (roles.Any(p => p == FactorySchedulerRoleType.Planner))
-            {
-                await _userManager.AddToRoleAsync(existingUser, Roles.FactorySchedulerPlanner);
             }
 
             return NoContent();
@@ -123,25 +137,75 @@ namespace BestSeller.Authentication.Service.Controllers
             return NoContent();
         }
 
-        [HttpPut("moveUserStation/{id}")]
-        public async Task<IActionResult> MoveUserAssignedWorkStation(MoveUserWorkStationRequest moveUserWorkStationRequest)
+        [HttpGet("Favorites/{id}")]
+        public async Task<ActionResult<IEnumerable<string>>> GetUserFavoriteBookListAsync([FromRoute] Guid id)
         {
-            var user = await _userManager.FindByIdAsync(moveUserWorkStationRequest.UserId.ToString());
-            if (user == null)
-            {
-                return NotFound();
-            }
-            var workStation = await _workStationRepository.GetOneAsync(moveUserWorkStationRequest.NewWorkStationId);
-            if (workStation == null)
-            {
-                //Should really be a exception
-                return NotFound();
-            }
-            user.AssignedWorkStationId = moveUserWorkStationRequest.NewWorkStationId;
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            var favoritesBookListObject = await UserFavoritesHelpers.GetOrCreateUserBestSellerFavoritesFromUserIfOneDoesNotExistAsync(user, _userBestSellerFavoritesRepository);
+            return Ok(favoritesBookListObject.BestSellerFavorites);
+        }
 
-            await _userManager.UpdateAsync(user);
+        [HttpGet("Favorites/TopBooks")]
+        public async Task<ActionResult<Dictionary<string, int>>> GetTopUserFavoriteBooksAsync()
+        {
+            var bookList = (await _userBestSellerFavoritesRepository.GetAllAsync())?.SelectMany(p => p.BestSellerFavorites);
 
-            return NoContent();
+            var groups =
+                from book in bookList
+                group book by book into g
+                select new
+                {
+                    Book = g.Key,
+                    Count = g.Count()
+                };
+            var dictionary = groups.ToDictionary(g => g.Book, g => g.Count);
+            return Ok(dictionary);
+        }
+
+        [HttpPut("Favorites/{id}/AddBooks/")]
+        public async Task<ActionResult> AddBooksToUserFavoritesAsync([FromRoute] Guid id, [FromBody] string[] booksToAdd)
+        {
+            if (booksToAdd == null)
+            {
+                throw new Exception("There are no books to add, book list is null");
+            }
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            var favoritesBookListObject = await UserFavoritesHelpers.GetOrCreateUserBestSellerFavoritesFromUserIfOneDoesNotExistAsync(user, _userBestSellerFavoritesRepository);
+            var favoritesList = favoritesBookListObject.BestSellerFavorites.ToList();
+            favoritesList.AddRange(booksToAdd);
+            favoritesBookListObject.BestSellerFavorites = favoritesList.Distinct().ToArray();
+            await _userBestSellerFavoritesRepository.UpdateAsync(favoritesBookListObject);
+            return Ok();
+        }
+
+        [HttpPut("Favorites/{id}/RemoveBooks/")]
+        public async Task<ActionResult> RemoveBooksFromUserFavoritesAsync([FromRoute] Guid id, [FromBody] string[] booksToRemove)
+        {
+            if (booksToRemove == null)
+            {
+                throw new Exception("There are no books to remove, book list is null");
+            }
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            var favoritesBookListObject = await UserFavoritesHelpers.GetOrCreateUserBestSellerFavoritesFromUserIfOneDoesNotExistAsync(user, _userBestSellerFavoritesRepository);
+            var favoritesList = favoritesBookListObject.BestSellerFavorites;
+            favoritesList = favoritesList.Where(p => !booksToRemove.Contains(p)).ToArray();
+            favoritesBookListObject.BestSellerFavorites = favoritesList;
+            await _userBestSellerFavoritesRepository.UpdateAsync(favoritesBookListObject);
+            return Ok();
+        }
+
+        [HttpPut("Favorites/{id}/UpdateBooks/")]
+        public async Task<ActionResult> UpdateBooksFromUserFavoritesAsync([FromRoute] Guid id, [FromBody] string[] favoriteBooks)
+        {
+            if (favoriteBooks == null)
+            {
+                throw new Exception("There are no books to update, book list is null");
+            }
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            var favoritesBookListObject = await UserFavoritesHelpers.GetOrCreateUserBestSellerFavoritesFromUserIfOneDoesNotExistAsync(user, _userBestSellerFavoritesRepository);
+            favoritesBookListObject.BestSellerFavorites = favoriteBooks;
+            await _userBestSellerFavoritesRepository.UpdateAsync(favoritesBookListObject);
+            return Ok();
         }
     }
 }

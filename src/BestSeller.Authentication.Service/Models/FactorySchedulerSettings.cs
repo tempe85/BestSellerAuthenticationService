@@ -2,15 +2,11 @@ using BestSeller.Authentication.Service.Interfaces;
 
 namespace BestSeller.Authentication.Service.Models
 {
-    public class FactorySchedulerSettings : IDatabaseSettings
+    public class BestSellerSettings : IDatabaseSettings
     {
         public string ConnectionString { get; init; }
         public string DatabaseName { get; init; }
-        public string WorkBuildingCollectionName { get; init; }
+        public string UserBestSellerFavoritesCollectionName { get; init; }
         public string UsersCollectionName { get; init; }
-        public string UserCertificationCollectionName { get; init; }
-        public string WorkStationUsersCollectionName { get; init; }
-        public string WorkAreaCollectionName { get; init; }
-        public string WorkStationCollectionName { get; init; }
     }
 }
