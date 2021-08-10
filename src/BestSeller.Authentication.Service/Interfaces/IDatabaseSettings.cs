@@ -1,4 +1,4 @@
-namespace FactoryScheduler.Authentication.Service.Interfaces
+namespace BestSeller.Authentication.Service.Interfaces
 {
     public interface IDatabaseSettings
     {

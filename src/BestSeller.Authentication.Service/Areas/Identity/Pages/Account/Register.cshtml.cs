@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using FactoryScheduler.Authentication.Service.Entities;
-using FactoryScheduler.Authentication.Service.Settings;
+using BestSeller.Authentication.Service.Entities;
+using BestSeller.Authentication.Service.Settings;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace FactoryScheduler.Authentication.Service.Areas.Identity.Pages.Account
+namespace BestSeller.Authentication.Service.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class RegisterModel : PageModel

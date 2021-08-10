@@ -1,4 +1,4 @@
-namespace FactoryScheduler.Authentication.Service.Enums
+namespace BestSeller.Authentication.Service.Enums
 {
     public enum StationCertification
     {

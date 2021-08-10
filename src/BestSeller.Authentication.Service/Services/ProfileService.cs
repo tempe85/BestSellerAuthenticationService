@@ -1,14 +1,14 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using FactoryScheduler.Authentication.Service.Entities;
+using BestSeller.Authentication.Service.Entities;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
-namespace FactoryScheduler.Authentication.Service
+namespace BestSeller.Authentication.Service
 {
     public class ProfileService : IProfileService
     {

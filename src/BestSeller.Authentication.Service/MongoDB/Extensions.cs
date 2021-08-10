@@ -1,14 +1,14 @@
-using FactoryScheduler.Authentication.Service.Interfaces;
-using FactoryScheduler.Authentication.Service.Models;
+using BestSeller.Authentication.Service.Interfaces;
+using BestSeller.Authentication.Service.Models;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
-using FactoryScheduler.Authentication.Service.Entities;
-using FactoryScheduler.Authentication.Service.Repositories;
+using BestSeller.Authentication.Service.Entities;
+using BestSeller.Authentication.Service.Repositories;
 
-namespace FactoryScheduler.Authentication.Service.MongoDB
+namespace BestSeller.Authentication.Service.MongoDB
 {
     public static class MongoDbExtensions
     {

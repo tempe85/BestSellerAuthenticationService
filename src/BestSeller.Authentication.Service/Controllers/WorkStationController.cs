@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FactoryScheduler.Authentication.Service.Dtos;
-using FactoryScheduler.Authentication.Service.Entities;
-using FactoryScheduler.Authentication.Service.Interfaces;
-using FactoryScheduler.Authentication.Service.Models;
-using FactoryScheduler.Authentication.Service.Processors;
+using BestSeller.Authentication.Service.Dtos;
+using BestSeller.Authentication.Service.Entities;
+using BestSeller.Authentication.Service.Interfaces;
+using BestSeller.Authentication.Service.Models;
+using BestSeller.Authentication.Service.Processors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FactoryScheduler.Authentication.Service.Controllers
+namespace BestSeller.Authentication.Service.Controllers
 {
     [ApiController]
     [Route("workStations")]

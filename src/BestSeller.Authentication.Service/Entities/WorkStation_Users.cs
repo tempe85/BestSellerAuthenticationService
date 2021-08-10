@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
-using FactoryScheduler.Authentication.Service.Interfaces;
+using BestSeller.Authentication.Service.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace FactoryScheduler.Authentication.Service.Entities
+namespace BestSeller.Authentication.Service.Entities
 {
     /// <summary>
     /// Users currently assigned to a work station

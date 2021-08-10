@@ -2,16 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FactoryScheduler.Authentication.Service.Dtos;
-using FactoryScheduler.Authentication.Service.Entities;
-using FactoryScheduler.Authentication.Service.Interfaces;
-using FactoryScheduler.Authentication.Service.Repositories;
+using BestSeller.Authentication.Service.Dtos;
+using BestSeller.Authentication.Service.Entities;
+using BestSeller.Authentication.Service.Interfaces;
+using BestSeller.Authentication.Service.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static IdentityServer4.IdentityServerConstants;
 
 //TODO: Add user certification table, only allow user (their own) or admin or planner to view user certs
-namespace FactoryScheduler.Authentication.Service.Controllers
+namespace BestSeller.Authentication.Service.Controllers
 {
     [ApiController]
     [Route("buildings")]

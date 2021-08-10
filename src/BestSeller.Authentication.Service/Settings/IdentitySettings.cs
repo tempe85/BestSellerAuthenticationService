@@ -1,4 +1,4 @@
-namespace FactoryScheduler.Authentication.Service.Settings
+namespace BestSeller.Authentication.Service.Settings
 {
     public class IdentitySettings
     {

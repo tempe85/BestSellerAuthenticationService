@@ -1,10 +1,10 @@
 using System;
-using FactoryScheduler.Authentication.Service.Enums;
-using FactoryScheduler.Authentication.Service.Interfaces;
+using BestSeller.Authentication.Service.Enums;
+using BestSeller.Authentication.Service.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace FactoryScheduler.Authentication.Service.Entities
+namespace BestSeller.Authentication.Service.Entities
 {
     public class WorkStation : IMongoEntity
     {

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace FactoryScheduler.Authentication.Service
+namespace BestSeller.Authentication.Service
 {
     public class Program
     {

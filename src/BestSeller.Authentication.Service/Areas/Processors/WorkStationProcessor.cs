@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using FactoryScheduler.Authentication.Service.Dtos;
-using FactoryScheduler.Authentication.Service.Entities;
-using FactoryScheduler.Authentication.Service.Interfaces;
+using BestSeller.Authentication.Service.Dtos;
+using BestSeller.Authentication.Service.Entities;
+using BestSeller.Authentication.Service.Interfaces;
 
-namespace FactoryScheduler.Authentication.Service.Processors
+namespace BestSeller.Authentication.Service.Processors
 {
 
     public class WorkStationProcessor : IWorkStationProcessor

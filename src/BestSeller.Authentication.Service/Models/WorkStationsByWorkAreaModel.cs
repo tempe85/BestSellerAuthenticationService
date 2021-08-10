@@ -1,7 +1,7 @@
 using System;
-using FactoryScheduler.Authentication.Service.Dtos;
+using BestSeller.Authentication.Service.Dtos;
 
-namespace FactoryScheduler.Authentication.Service.Models
+namespace BestSeller.Authentication.Service.Models
 {
     public class WorkStationsByWorkAreaModel
     {

@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FactoryScheduler.Authentication.Service.Entities;
-using FactoryScheduler.Authentication.Service.HostedServices;
-using FactoryScheduler.Authentication.Service.Models;
-using FactoryScheduler.Authentication.Service.MongoDB;
-using FactoryScheduler.Authentication.Service.Processors;
-using FactoryScheduler.Authentication.Service.Repositories;
-using FactoryScheduler.Authentication.Service.Settings;
+using BestSeller.Authentication.Service.Entities;
+using BestSeller.Authentication.Service.HostedServices;
+using BestSeller.Authentication.Service.Models;
+using BestSeller.Authentication.Service.MongoDB;
+using BestSeller.Authentication.Service.Processors;
+using BestSeller.Authentication.Service.Repositories;
+using BestSeller.Authentication.Service.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -23,7 +23,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 
-namespace FactoryScheduler.Authentication.Service
+namespace BestSeller.Authentication.Service
 {
     //TODO: Eventually we want to split this out into multiple projects
     //WebApi

@@ -1,7 +1,7 @@
 using System;
-using FactoryScheduler.Authentication.Service.Interfaces;
+using BestSeller.Authentication.Service.Interfaces;
 
-namespace FactoryScheduler.Authentication.Service.Entities
+namespace BestSeller.Authentication.Service.Entities
 {
     public class WorkArea : IMongoEntity
     {

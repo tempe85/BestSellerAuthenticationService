@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace FactoryScheduler.Authentication.Service.Dtos
+namespace BestSeller.Authentication.Service.Dtos
 {
     public record FactorySchedulerUserDto(
         Guid Id,

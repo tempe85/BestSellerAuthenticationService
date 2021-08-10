@@ -1,8 +1,8 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using FactoryScheduler.Authentication.Service.Enums;
+using BestSeller.Authentication.Service.Enums;
 
-namespace FactoryScheduler.Authentication.Service.Dtos
+namespace BestSeller.Authentication.Service.Dtos
 {
     //Workbuilding Dtos
     public record WorkBuildingDto(Guid Id, string Name, string Description, DateTimeOffset CreatedDate);

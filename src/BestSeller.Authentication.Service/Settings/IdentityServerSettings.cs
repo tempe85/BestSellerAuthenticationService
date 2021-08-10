@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using IdentityServer4.Models;
 
-namespace FactoryScheduler.Authentication.Service.Settings
+namespace BestSeller.Authentication.Service.Settings
 {
     public class IdentityServerSettings
     {

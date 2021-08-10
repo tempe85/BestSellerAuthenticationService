@@ -1,4 +1,4 @@
-namespace FactoryScheduler.Authentication.Service
+namespace BestSeller.Authentication.Service
 {
     public static class Roles
     {

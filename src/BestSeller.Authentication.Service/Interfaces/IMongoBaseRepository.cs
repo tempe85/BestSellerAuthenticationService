@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace FactoryScheduler.Authentication.Service.Interfaces
+namespace BestSeller.Authentication.Service.Interfaces
 {
     public interface IMongoBaseRepository<T> where T : IMongoEntity
     {

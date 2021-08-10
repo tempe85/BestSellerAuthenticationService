@@ -1,6 +1,6 @@
-using FactoryScheduler.Authentication.Service.Interfaces;
+using BestSeller.Authentication.Service.Interfaces;
 
-namespace FactoryScheduler.Authentication.Service.Models
+namespace BestSeller.Authentication.Service.Models
 {
     public class FactorySchedulerSettings : IDatabaseSettings
     {

@@ -1,13 +1,13 @@
 using System.Threading;
 using System.Threading.Tasks;
-using FactoryScheduler.Authentication.Service.Entities;
-using FactoryScheduler.Authentication.Service.Settings;
+using BestSeller.Authentication.Service.Entities;
+using BestSeller.Authentication.Service.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
-namespace FactoryScheduler.Authentication.Service.HostedServices
+namespace BestSeller.Authentication.Service.HostedServices
 {
     public class IdentityConfigureHostedService : IHostedService
     {
