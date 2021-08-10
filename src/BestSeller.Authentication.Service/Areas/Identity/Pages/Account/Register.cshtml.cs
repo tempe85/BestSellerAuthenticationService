@@ -6,6 +6,8 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using BestSeller.Authentication.Service.Entities;
+using BestSeller.Authentication.Service.Helpers;
+using BestSeller.Authentication.Service.Interfaces;
 using BestSeller.Authentication.Service.Settings;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -26,6 +28,7 @@ namespace BestSeller.Authentication.Service.Areas.Identity.Pages.Account
         private readonly UserManager<BestSellerUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IMongoBaseRepository<UserBestSellerFavorites> _userBestSellerFavoritesRepository;
         private readonly IdentitySettings _identitySettings;
 
         public RegisterModel(
@@ -33,12 +36,15 @@ namespace BestSeller.Authentication.Service.Areas.Identity.Pages.Account
             SignInManager<BestSellerUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            IOptions<IdentitySettings> identityOptions)
+            IOptions<IdentitySettings> identityOptions,
+            IMongoBaseRepository<UserBestSellerFavorites> userBestSellerFavoritesRepository
+            )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _userBestSellerFavoritesRepository = userBestSellerFavoritesRepository;
             _identitySettings = identityOptions.Value;
         }
 
@@ -95,7 +101,9 @@ namespace BestSeller.Authentication.Service.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    await _userManager.AddToRoleAsync(user, Roles.FactorySchedulerUser);
+                    await UserFavoritesHelpers.GetOrCreateUserBestSellerFavoritesFromUserIfOneDoesNotExistAsync(user, _userBestSellerFavoritesRepository);
+
+                    await _userManager.AddToRoleAsync(user, Roles.BestSellerUser);
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

@@ -12,7 +12,7 @@ namespace BestSeller.Authentication.Service.Helpers
         public static async Task<UserBestSellerFavorites> GetOrCreateUserBestSellerFavoritesFromUserIfOneDoesNotExistAsync(BestSellerUser user, IMongoBaseRepository<UserBestSellerFavorites> userBestSellerFavoritesRepository)
         {
             var userBestSellerFavorites = await userBestSellerFavoritesRepository.GetAllAsync(p => p.UserId == user.Id);
-            if (userBestSellerFavorites == null)
+            if (!userBestSellerFavorites.Any())
             {
                 var bestSellerUserFavoritesObject = new UserBestSellerFavorites
                 {

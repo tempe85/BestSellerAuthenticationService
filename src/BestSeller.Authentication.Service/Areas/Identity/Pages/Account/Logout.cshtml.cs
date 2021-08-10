@@ -15,12 +15,12 @@ namespace BestSeller.Authentication.Service.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class LogoutModel : PageModel
     {
-        private readonly SignInManager<FactorySchedulerUser> _signInManager;
+        private readonly SignInManager<BestSellerUser> _signInManager;
         private readonly ILogger<LogoutModel> _logger;
 
         private readonly IIdentityServerInteractionService _identityServerInteractionService;
 
-        public LogoutModel(SignInManager<FactorySchedulerUser> signInManager,
+        public LogoutModel(SignInManager<BestSellerUser> signInManager,
                            IIdentityServerInteractionService identityServerInteractionService,
                            ILogger<LogoutModel> logger)
         {

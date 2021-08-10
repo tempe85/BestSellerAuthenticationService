@@ -10,14 +10,14 @@ namespace BestSeller.Authentication.Service
     public static class Extensions
     {
 
-        public static BestSellerUserDto AsDto(this BestSellerUser factorySchedulerUser, string[] favoritesBookList) =>
-                new BestSellerUserDto(Id: factorySchedulerUser.Id,
-                                            Username: factorySchedulerUser.UserName,
-                                            Email: factorySchedulerUser.Email,
-                                            FirstName: factorySchedulerUser.FirstName,
-                                            LastName: factorySchedulerUser.LastName,
+        public static BestSellerUserDto AsDto(this BestSellerUser user, string[] favoritesBookList) =>
+                new BestSellerUserDto(Id: user.Id,
+                                            Username: user.UserName,
+                                            Email: user.Email,
+                                            FirstName: user.FirstName,
+                                            LastName: user.LastName,
                                             FavoritesBookList: favoritesBookList,
-                                            CreatedDate: factorySchedulerUser.CreatedOn);
+                                            CreatedDate: user.CreatedOn);
 
     }
 }

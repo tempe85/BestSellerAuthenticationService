@@ -14,7 +14,7 @@ namespace BestSeller.Authentication.Service.MongoDB
     {
         public static IServiceCollection AddMongoDB(
             this IServiceCollection services,
-            FactorySchedulerSettings settings)
+            BestSellerSettings settings)
         {
             BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
             BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(BsonType.String));
@@ -58,7 +58,7 @@ namespace BestSeller.Authentication.Service.MongoDB
         //     await workAreaUsersCollection.Indexes.CreateOneAsync("{}", options);
         // }
 
-        private static IMongoDatabase CreateMongoDatabase(FactorySchedulerSettings settings)
+        private static IMongoDatabase CreateMongoDatabase(BestSellerSettings settings)
         {
             var mongoClient = new MongoClient(settings.ConnectionString);
             return mongoClient.GetDatabase(settings.DatabaseName);

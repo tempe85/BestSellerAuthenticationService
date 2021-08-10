@@ -28,8 +28,7 @@ namespace BestSeller.Authentication.Service.HostedServices
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<BestSellerUser>>();
 
             await CreateRoleIfDoesNotExistAsync(Roles.Admin, roleManager);
-            await CreateRoleIfDoesNotExistAsync(Roles.FactorySchedulerUser, roleManager);
-            await CreateRoleIfDoesNotExistAsync(Roles.FactorySchedulerPlanner, roleManager);
+            await CreateRoleIfDoesNotExistAsync(Roles.BestSellerUser, roleManager);
 
             var adminUser = await userManager.FindByEmailAsync(_identitySettings.AdminEmail);
             if (adminUser == null)

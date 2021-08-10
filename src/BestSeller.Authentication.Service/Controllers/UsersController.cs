@@ -16,12 +16,12 @@ namespace BestSeller.Authentication.Service.Controllers
 {
     [ApiController]
     [Route("Users")]
-    public class FactorySchedulerUsersController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly UserManager<BestSellerUser> _userManager;
         private readonly IMongoBaseRepository<UserBestSellerFavorites> _userBestSellerFavoritesRepository;
 
-        public FactorySchedulerUsersController(UserManager<BestSellerUser> userManager, IMongoBaseRepository<UserBestSellerFavorites> userBestSellerFavoritesRepository)
+        public UsersController(UserManager<BestSellerUser> userManager, IMongoBaseRepository<UserBestSellerFavorites> userBestSellerFavoritesRepository)
         {
             _userManager = userManager;
             _userBestSellerFavoritesRepository = userBestSellerFavoritesRepository;
@@ -59,7 +59,7 @@ namespace BestSeller.Authentication.Service.Controllers
                 UserName = addUserDto.Email
             };
             await _userManager.CreateAsync(createdUser, addUserDto.Password);
-            await _userManager.AddToRoleAsync(createdUser, Roles.FactorySchedulerUser);
+            await _userManager.AddToRoleAsync(createdUser, Roles.BestSellerUser);
 
             await UserFavoritesHelpers.GetOrCreateUserBestSellerFavoritesFromUserIfOneDoesNotExistAsync(createdUser, _userBestSellerFavoritesRepository);
 
