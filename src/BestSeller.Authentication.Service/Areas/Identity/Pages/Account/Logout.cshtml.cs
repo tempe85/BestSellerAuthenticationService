@@ -34,8 +34,8 @@ namespace BestSeller.Authentication.Service.Areas.Identity.Pages.Account
       var context = await _identityServerInteractionService.GetLogoutContextAsync(userId);
       // if (context?.ShowSignoutPrompt == false)
       // {
-      return await this.OnPost("http://localhost:9184/"); //(context.PostLogoutRedirectUri);
-                                                          // }
+      return await this.OnPost("http://localhost:9184/favorites"); //(context.PostLogoutRedirectUri);
+                                                                   // }
 
       //return Page();
     }
