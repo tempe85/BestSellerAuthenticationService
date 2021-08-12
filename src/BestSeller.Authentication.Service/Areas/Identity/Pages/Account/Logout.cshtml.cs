@@ -12,46 +12,46 @@ using Microsoft.Extensions.Logging;
 
 namespace BestSeller.Authentication.Service.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
-    public class LogoutModel : PageModel
+  [AllowAnonymous]
+  public class LogoutModel : PageModel
+  {
+    private readonly SignInManager<BestSellerUser> _signInManager;
+    private readonly ILogger<LogoutModel> _logger;
+
+    private readonly IIdentityServerInteractionService _identityServerInteractionService;
+
+    public LogoutModel(SignInManager<BestSellerUser> signInManager,
+                       IIdentityServerInteractionService identityServerInteractionService,
+                       ILogger<LogoutModel> logger)
     {
-        private readonly SignInManager<BestSellerUser> _signInManager;
-        private readonly ILogger<LogoutModel> _logger;
-
-        private readonly IIdentityServerInteractionService _identityServerInteractionService;
-
-        public LogoutModel(SignInManager<BestSellerUser> signInManager,
-                           IIdentityServerInteractionService identityServerInteractionService,
-                           ILogger<LogoutModel> logger)
-        {
-            _signInManager = signInManager;
-            _logger = logger;
-            _identityServerInteractionService = identityServerInteractionService;
-        }
-
-        public async Task<IActionResult> OnGetAsync(string userId)
-        {
-            var context = await _identityServerInteractionService.GetLogoutContextAsync(userId);
-            // if (context?.ShowSignoutPrompt == false)
-            // {
-            return await this.OnPost("http://localhost:3000/"); //(context.PostLogoutRedirectUri);
-                                                                // }
-
-            //return Page();
-        }
-
-        public async Task<IActionResult> OnPost(string returnUrl = null)
-        {
-            await _signInManager.SignOutAsync();
-            _logger.LogInformation("User logged out.");
-            if (returnUrl != null)
-            {
-                return Redirect(returnUrl);
-            }
-            else
-            {
-                return RedirectToPage();
-            }
-        }
+      _signInManager = signInManager;
+      _logger = logger;
+      _identityServerInteractionService = identityServerInteractionService;
     }
+
+    public async Task<IActionResult> OnGetAsync(string userId)
+    {
+      var context = await _identityServerInteractionService.GetLogoutContextAsync(userId);
+      // if (context?.ShowSignoutPrompt == false)
+      // {
+      return await this.OnPost("http://localhost:9184/"); //(context.PostLogoutRedirectUri);
+                                                          // }
+
+      //return Page();
+    }
+
+    public async Task<IActionResult> OnPost(string returnUrl = null)
+    {
+      await _signInManager.SignOutAsync();
+      _logger.LogInformation("User logged out.");
+      if (returnUrl != null)
+      {
+        return Redirect(returnUrl);
+      }
+      else
+      {
+        return RedirectToPage();
+      }
+    }
+  }
 }
