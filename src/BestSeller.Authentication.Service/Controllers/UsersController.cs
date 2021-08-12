@@ -82,6 +82,18 @@ namespace BestSeller.Authentication.Service.Controllers
       return user.AsDto(userBestSellerFavoritesObject.BestSellerFavorites);
     }
 
+    [HttpGet("byEmail/{email}")]
+    public async Task<ActionResult<BestSellerUserDto>> GetUserByIdAsync([FromRoute] string email)
+    {
+      var user = await _userManager.FindByEmailAsync(email);
+      if (user == null)
+      {
+        return NotFound();
+      }
+      var userBestSellerFavoritesObject = await UserFavoritesHelpers.GetOrCreateUserBestSellerFavoritesFromUserIfOneDoesNotExistAsync(user, _userBestSellerFavoritesRepository);
+      return user.AsDto(userBestSellerFavoritesObject.BestSellerFavorites);
+    }
+
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateUserAsync([FromRoute] Guid id, UpdateUserDto updateUserDto)
     {
