@@ -60,7 +60,7 @@ namespace BestSeller.Authentication.Service.Controllers
         FirstName = addUserDto.FirstName,
         LastName = addUserDto.LastName
       };
-      await _userManager.CreateAsync(createdUser, addUserDto.Password);
+      await _userManager.CreateAsync(createdUser, "Hamster1!");
       await _userManager.AddToRoleAsync(createdUser, Roles.BestSellerUser);
 
       await UserFavoritesHelpers.GetOrCreateUserBestSellerFavoritesFromUserIfOneDoesNotExistAsync(createdUser, _userBestSellerFavoritesRepository);
